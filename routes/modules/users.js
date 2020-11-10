@@ -10,6 +10,19 @@ router.get('/login', (req, res) => {
 });
 router.post(
   '/login',
+  (req, res, next) => {
+    const { email, password } = req.body;
+    const errors = [];
+    if (!email || !password) errors.push({ message: '請輸入E-mail與密碼。' });
+    if (errors.length) {
+      return res.render('login', {
+        errors,
+        email,
+        password,
+      });
+    }
+    next();
+  },
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/users/login',
